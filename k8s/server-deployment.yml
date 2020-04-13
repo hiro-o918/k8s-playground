@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+      - name: server
+        image: hiro918/k8s-complex-server
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 5000
+        env:
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: REDIS_HOST
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: REDIS_PORT
+          - name: PGHOST
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: PGHOST
+          - name: PGPORT
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: PGPORT
+          - name: PGUSER
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: PGUSER
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secrets
+                key: PGPASSWORD
+          - name: PGDATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: PGDATABASE
+          
+
+
+
+
+

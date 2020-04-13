@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: client
+        image: hiro918/k8s-complex-client
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+        ports:
+        - containerPort: 3000
+

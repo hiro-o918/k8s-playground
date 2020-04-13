@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: hiro918/k8s-complex-worker
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+        env:
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: REDIS_HOST
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: common-config-map 
+                key: REDIS_PORT
