@@ -13,7 +13,8 @@ docker push $DOKERHUB_ID/k8s-complex-server:$SHA
 # configre kubectl
 aws eks --region ap-northeast-1 update-kubeconfig --name hironori-udemy-k8s-cluster
 # apply manufests
-kubectl apply -f k8s --dry-run=client
-kubectl set image deployments/client-deployment client=$DOKERHUB_ID/k8s-complex-client:$SHA --dry-run=client
-kubectl set image deployments/worker-deployment worker=$DOKERHUB_ID/k8s-complex-client:$SHA --dry-run=client
-kubectl set image deployments/server-deployment server=$DOKERHUB_ID/k8s-complex-client:$SHA --dry-run=client
+kubectl get pods
+# kubectl apply -f k8s --dry-run=client
+# kubectl set image deployments/client-deployment client=$DOKERHUB_ID/k8s-complex-client:$SHA --dry-run=client
+# kubectl set image deployments/worker-deployment worker=$DOKERHUB_ID/k8s-complex-client:$SHA --dry-run=client
+# kubectl set image deployments/server-deployment server=$DOKERHUB_ID/k8s-complex-client:$SHA --dry-run=client
