@@ -1,0 +1,40 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+    - pushd client && make dev/build && popd
+
+scrpit:
+  - pushd client && make dev/test && popd
+
+after_success:
+  - pushd client && make build && popd
+  - pushd worker && make build  && popd
+  - pushd server && make build && popd
+  - pushd nginx && make build && popd
+  - echo "$DOKERHUB_LOGIN_KEY" | docker login -u "$DOKERHUB_ID" --password-stdin
+  - docker push $DOKERHUB_ID/k8s-complex-client
+  - docker push $DOKERHUB_ID/k8s-complex-worker
+  - docker push $DOKERHUB_ID/k8s-complex-server
+  - docker push $DOKERHUB_ID/k8s-complex-nginx
+
+before_deploy:
+  # Install kubectl
+  - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/kubectl
+  - chmod +x ./kubectl
+  - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+  # Install aws cli
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  - unzip awscliv2.zip
+  - ./aws/install
+
+deploy:
+  provider: script
+  script:  aws eks --region ap-northeast-1 update-kubeconfig --name hironori-udemy-k8s-cluster && kubectl apply -f k8s --dry-run=client
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(master|feature/deploy.+)$
+
+    
+
