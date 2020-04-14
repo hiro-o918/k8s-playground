@@ -1,7 +1,7 @@
 # build and push images
-docker build -t $DOKERHUB_ID/k8s-complex-client:latest -t $DOKERHUB_ID/k8s-complex-client:$SHA -f ./client/Dockerfile .
-docker build -t $DOKERHUB_ID/k8s-complex-worker:latest -t $DOKERHUB_ID/k8s-complex-worker:$SHA -f ./worker/Dockerfile .
-docker build -t $DOKERHUB_ID/k8s-complex-server:latest -t $DOKERHUB_ID/k8s-complex-server:$SHA -f ./server/Dockerfile .
+docker build -t $DOKERHUB_ID/k8s-complex-client:latest -t $DOKERHUB_ID/k8s-complex-client:$SHA -f ./client/Dockerfile ./client
+docker build -t $DOKERHUB_ID/k8s-complex-worker:latest -t $DOKERHUB_ID/k8s-complex-worker:$SHA -f ./worker/Dockerfile ./worker
+docker build -t $DOKERHUB_ID/k8s-complex-server:latest -t $DOKERHUB_ID/k8s-complex-server:$SHA -f ./server/Dockerfile ./server
 echo "$DOKERHUB_LOGIN_KEY" | docker login -u "$DOKERHUB_ID" --password-stdin
 docker push $DOKERHUB_ID/k8s-complex-client:latest
 docker push $DOKERHUB_ID/k8s-complex-worker:latest
