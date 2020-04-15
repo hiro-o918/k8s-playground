@@ -1,0 +1,32 @@
+sudo: required
+services:
+  - docker
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+before_install:
+    - pushd client && make dev/build && popd
+
+scrpit:
+  - pushd client && make dev/test && popd
+
+before_deploy:
+  # Install kubectl
+  - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.15.10/2020-02-22/bin/linux/amd64/kubectl
+  - chmod +x ./kubectl
+  - mkdir -p $HOME/bin && mv ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+  # Install aws cli
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  - unzip awscliv2.zip
+  - sudo ./aws/install
+  - rm -rf aws/ awscliv2.zip
+
+deploy:
+  provider: script
+  script: bash deploy.sh
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(master|feature/deploy.+)$
+
+    
+
