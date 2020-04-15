@@ -15,5 +15,5 @@ aws eks --region ap-northeast-1 update-kubeconfig --name hironori-udemy-k8s-clus
 # apply manufests
 kubectl apply -f k8s
 kubectl set image deployments/client-deployment client=$DOKERHUB_ID/k8s-complex-client:$SHA
-kubectl set image deployments/worker-deployment worker=$DOKERHUB_ID/k8s-complex-client:$SHA
-kubectl set image deployments/server-deployment server=$DOKERHUB_ID/k8s-complex-client:$SHA
+kubectl set image deployments/worker-deployment worker=$DOKERHUB_ID/k8s-complex-worker:$SHA
+kubectl set image deployments/server-deployment server=$DOKERHUB_ID/k8s-complex-server:$SHA
